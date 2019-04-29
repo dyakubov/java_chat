@@ -39,9 +39,9 @@ public class ChatServer {
                 if (user != null && authService.authUser(user)) {
                     System.out.printf("User %s authorized successful!%n", user.getLogin());
                     subscribe(user.getLogin(), socket);
-                    sendConnectedUsers(user.getLogin());
                     out.writeUTF(MessagePatterns.AUTH_SUCCESS_RESPONSE);
                     out.flush();
+                    sendConnectedUsers();
                 } else {
                     if (user != null) {
                         System.out.printf("Wrong authorization for user %s%n", user.getLogin());
@@ -105,13 +105,9 @@ public class ChatServer {
         sendUserDisconnectedMessage(login);
     }
 
-    public void sendConnectedUsers(String login) throws IOException {
-        List<String> connectedUsers = new ArrayList<>();
-        if (!clientHandlerMap.isEmpty()){
-            for (ClientHandler clientHandler : clientHandlerMap.values()){
-                connectedUsers.add(clientHandler.getLogin());
-            }
-            clientHandlerMap.get(login).sendConnectedUsers(connectedUsers);
+    public void sendConnectedUsers() throws IOException {
+        for (ClientHandler clientHandler : clientHandlerMap.values()){
+            sendUserConnectedMessage(clientHandler.getLogin());
         }
 
     }

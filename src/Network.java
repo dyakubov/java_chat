@@ -3,7 +3,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -56,12 +55,6 @@ public class Network implements Closeable {
                             continue;
                         }
 
-                        List connectedUsersList = MessagePatterns.parseConnectedUsersMessage(text);
-                        System.out.println("Connected users request message " + text);
-                        if (!connectedUsersList.isEmpty()) {
-                            messageReciever.sendConnectedUsers(connectedUsersList);
-                            continue;
-                        }
 
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -103,15 +96,6 @@ public class Network implements Closeable {
     }
 
 
-
-
-    public List<String> requestConnectedUsersList() throws IOException {
-
-        sendMessage(String.format(MessagePatterns.GET_CONNECTED_USERS));
-        String response = in.readUTF();
-        return null;
-
-    }
 
     public String getLogin() {
         return login;

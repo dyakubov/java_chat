@@ -8,6 +8,4 @@ public interface MessageReciever {
 
     void userDisconnected(String login);
 
-    void sendConnectedUsers(List<String> connectedUsers);
-
 }

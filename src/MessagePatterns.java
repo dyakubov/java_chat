@@ -23,9 +23,6 @@ public final class MessagePatterns {
 
     public static final Pattern MESSAGE_REC_PATTERN = Pattern.compile("^/w (\\w+) (.+)", Pattern.MULTILINE);
 
-    public static final String GET_CONNECTED_USERS = "/get users";
-    public static final String CONNECTED_USERS_LIST = "/users";
-
     public static TextMessage parseTextMessageRegx(String text, String userTo) {
         Matcher matcher = MESSAGE_REC_PATTERN.matcher(text);
         if (matcher.matches()) {
@@ -66,19 +63,4 @@ public final class MessagePatterns {
             return null;
         }
     }
-
-    public static List<String> parseConnectedUsersMessage(String text) {
-        List<String> users = new ArrayList<>();
-        String[] parts = text.split(", ");
-        if (parts[0].equals(CONNECTED_USERS_LIST)) {
-            for (String s : parts){
-                users.add(s);
-            }
-        } else {
-            return Collections.emptyList();
-        }
-        users.remove(CONNECTED_USERS_LIST);
-        return users;
-    }
-
 }

@@ -72,12 +72,7 @@ public class ClientHandler {
         }
     }
 
-    public void sendConnectedUsers (List<String> users) throws IOException {
-        if (socket.isConnected()) {
-            out.writeUTF(users.toString());
-            System.out.println(users.toString());
-        }
-    }
+
 
 
 

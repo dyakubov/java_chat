@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -66,6 +68,7 @@ public class MainWindow extends JFrame implements MessageReciever {
                 }
             }
         });
+
         sendMessagePanel.add(sendButton, BorderLayout.EAST);
         messageField = new JTextField();
         sendMessagePanel.add(messageField, BorderLayout.CENTER);
@@ -141,12 +144,6 @@ public class MainWindow extends JFrame implements MessageReciever {
         });
     }
 
-    @Override
-    public void sendConnectedUsers(List<String> connectedUsers) {
-        for (String s : connectedUsers) {
-            userConnected(s);
-        }
-    }
 }
 
 
