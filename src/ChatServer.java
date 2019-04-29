@@ -61,6 +61,9 @@ public class ChatServer {
         if (authParts.length != 3 || !authParts[0].equals("/auth")) {
             System.out.printf("Incorrect authorization message %s%n", authMessage);
             throw new AuthException();
+        } else if (clientHandlerMap.containsKey(authParts[1])){
+            System.out.printf("User %s already authorized %n", authParts[1]);
+            throw new AuthException();
         }
         return new User(authParts[1], authParts[2]);
     }
@@ -84,7 +87,6 @@ public class ChatServer {
     }
 
 
-
     public void sendMessage(TextMessage msg) throws IOException {
         ClientHandler userToClientHandler = clientHandlerMap.get(msg.getUserTo());
         if (userToClientHandler != null) {
@@ -96,8 +98,8 @@ public class ChatServer {
 
     public void subscribe(String login, Socket socket) throws IOException {
         // TODO Проверить, подключен ли уже пользователь. Если да, то отправить клиенту ошибку
-        clientHandlerMap.put(login, new ClientHandler(login, socket, this));
-        sendUserConnectedMessage(login);
+            clientHandlerMap.put(login, new ClientHandler(login, socket, this));
+            sendUserConnectedMessage(login);
     }
 
     public void unsubscribe(String login) throws IOException {

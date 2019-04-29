@@ -59,7 +59,6 @@ public class MainWindow extends JFrame implements MessageReciever {
             public void actionPerformed(ActionEvent e) {
                 String text = messageField.getText();
                 String userTo = userList.getSelectedValue();
-                userField.setText(userList.getSelectedValue());
                 if (text != null && !text.trim().isEmpty()) {
                     TextMessage msg = new TextMessage(network.getLogin(), userTo, text);
                     messageListModel.add(messageListModel.size(), msg);
@@ -105,6 +104,7 @@ public class MainWindow extends JFrame implements MessageReciever {
         });
 
         setTitle("Сетевой чат. Пользователь " + network.getLogin());
+        
     }
 
     @Override
