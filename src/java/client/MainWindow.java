@@ -1,12 +1,13 @@
+package client;
+
+import server.MessageReciever;
+
 import javax.swing.*;
-import javax.swing.event.AncestorEvent;
-import javax.swing.event.AncestorListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.List;
 
 public class MainWindow extends JFrame implements MessageReciever {
 
@@ -104,7 +105,7 @@ public class MainWindow extends JFrame implements MessageReciever {
         });
 
         setTitle("Сетевой чат. Пользователь " + network.getLogin());
-        
+
     }
 
     @Override

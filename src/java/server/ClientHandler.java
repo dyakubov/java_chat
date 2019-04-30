@@ -1,8 +1,12 @@
+package server;
+
+import client.MessagePatterns;
+import client.TextMessage;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.List;
 
 
 public class ClientHandler {
@@ -35,7 +39,7 @@ public class ClientHandler {
                             msg.swapUsers();
                             chatServer.sendMessage(msg);
                         } else if (text.equals(MessagePatterns.DISCONNECT)) {
-                            System.out.printf("User %s is disconnected%n", login);
+                            System.out.printf("server.User %s is disconnected%n", login);
                             chatServer.unsubscribe(login);
                             return;
                         }

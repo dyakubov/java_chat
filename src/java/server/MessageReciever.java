@@ -1,4 +1,6 @@
-import java.util.List;
+package server;
+
+import client.TextMessage;
 
 public interface MessageReciever {
 

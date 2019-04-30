@@ -1,9 +1,15 @@
+package client;
+
+import exeptions.AuthException;
+import exeptions.UserExistException;
+import exeptions.WrongLoginPasswordException;
+
+import server.MessageReciever;
 import java.io.Closeable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.List;
 
 
 public class Network implements Closeable {
@@ -77,9 +83,9 @@ public class Network implements Closeable {
         if (response.equals(MessagePatterns.AUTH_SUCCESS_RESPONSE)) {
             this.login = login;
             receiverThread.start();
-        } else {
-            throw new AuthException();
-        }
+        } else if (response.equals(MessagePatterns.USER_ALREADY_AUTHORIZED)) {
+            throw new UserExistException();
+        } else throw new WrongLoginPasswordException();
     }
 
     public void sendTextMessage(TextMessage message) {

@@ -1,3 +1,5 @@
+package server;
+
 public class User {
 
     private String login;

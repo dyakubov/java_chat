@@ -1,6 +1,7 @@
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+package client;
+
+import client.TextMessage;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -10,7 +11,7 @@ public final class MessagePatterns {
     public static final String AUTH_PATTERN = "/auth %s %s";
     public static final String AUTH_SUCCESS_RESPONSE = "/auth successful";
     public static final String AUTH_FAIL_RESPONSE = "/auth fail";
-    public static final String USER_ALREADY_AUTHORIZED = "/auth already_authorized %s";
+    public static final String USER_ALREADY_AUTHORIZED = "/auth already authorized";
 
 
     public static final String DISCONNECT = "/disconnect";

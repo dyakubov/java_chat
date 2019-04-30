@@ -1,3 +1,9 @@
+package client;
+
+import exeptions.AuthException;
+import exeptions.UserExistException;
+import exeptions.WrongLoginPasswordException;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -69,9 +75,21 @@ public class LoginDialog extends JDialog {
                             "Авторизация",
                             JOptionPane.ERROR_MESSAGE);
                     return;
-                } catch (AuthException ex) {
+                } catch (UserExistException ex) {
                     JOptionPane.showMessageDialog(LoginDialog.this,
-                            "Ошибка авторизации",
+                            "Пользователь уже авторизован",
+                            "Авторизация",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
+                } catch (WrongLoginPasswordException e1) {
+                    JOptionPane.showMessageDialog(LoginDialog.this,
+                            "Неверный логин/пароль",
+                            "Авторизация",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
+                } catch (AuthException e1) {
+                    JOptionPane.showMessageDialog(LoginDialog.this,
+                            "Неизвестная ошибка авторизации",
                             "Авторизация",
                             JOptionPane.ERROR_MESSAGE);
                     return;

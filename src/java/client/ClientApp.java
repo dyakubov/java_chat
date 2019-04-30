@@ -1,6 +1,8 @@
+package client;
+
 import javax.swing.*;
 
-public class SwingApp {
+public class ClientApp {
 
     private static MainWindow mainWindow;
 

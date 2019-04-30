@@ -1,3 +1,12 @@
+package server;
+
+import client.MessagePatterns;
+import client.TextMessage;
+import exeptions.AuthException;
+import exeptions.UserExistException;
+import exeptions.WrongLoginPasswordException;
+
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -18,7 +27,7 @@ public class ChatServer {
 
     private void start(int port) {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
-            System.out.println("server started!");
+            System.out.println("Server started!");
             while (true) {
                 Socket socket = serverSocket.accept();
                 DataInputStream inp = new DataInputStream(socket.getInputStream());
@@ -29,12 +38,16 @@ public class ChatServer {
                 try {
                     String authMessage = inp.readUTF();
                     user = checkAuthentication(authMessage);
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                } catch (AuthException ex) {
+                }  catch (WrongLoginPasswordException ex) {
                     out.writeUTF(MessagePatterns.AUTH_FAIL_RESPONSE);
                     out.flush();
                     socket.close();
+                } catch (UserExistException ex){
+                    out.writeUTF(MessagePatterns.USER_ALREADY_AUTHORIZED);
+                    out.flush();
+                    socket.close();
+                } catch (IOException| AuthException ex) {
+                    ex.printStackTrace();
                 }
                 if (user != null && authService.authUser(user)) {
                     System.out.printf("User %s authorized successful!%n", user.getLogin());
@@ -60,10 +73,10 @@ public class ChatServer {
         String[] authParts = authMessage.split(" ");
         if (authParts.length != 3 || !authParts[0].equals("/auth")) {
             System.out.printf("Incorrect authorization message %s%n", authMessage);
-            throw new AuthException();
+            throw new AuthException("Неверное авторизационное сообщение");
         } else if (clientHandlerMap.containsKey(authParts[1])){
             System.out.printf("User %s already authorized %n", authParts[1]);
-            throw new AuthException();
+            throw new UserExistException();
         }
         return new User(authParts[1], authParts[2]);
     }
@@ -97,7 +110,6 @@ public class ChatServer {
     }
 
     public void subscribe(String login, Socket socket) throws IOException {
-        // TODO Проверить, подключен ли уже пользователь. Если да, то отправить клиенту ошибку
             clientHandlerMap.put(login, new ClientHandler(login, socket, this));
             sendUserConnectedMessage(login);
     }
