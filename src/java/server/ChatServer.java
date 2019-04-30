@@ -19,20 +19,21 @@ public class ChatServer {
 
     private AuthService authService = new AuthServiceImpl();
     private Map<String, ClientHandler> clientHandlerMap = Collections.synchronizedMap(new HashMap<>());
+    private ServerSocket currentSocket;
+    private EventsReciever eventsReciever;
 
-    public static void main(String[] args) {
-        ChatServer chatServer = new ChatServer();
-        chatServer.start(7777);
-    }
 
-    private void start(int port) {
-        try (ServerSocket serverSocket = new ServerSocket(port)) {
-            System.out.println("Server started!");
-            while (true) {
+
+    public void start(EventsReciever eventsReciever) {
+        try (ServerSocket serverSocket = new ServerSocket(7777)) {
+            currentSocket = serverSocket;
+            this.eventsReciever = eventsReciever;
+            eventsReciever.log("Сервер запущен");
+            while (!currentSocket.isClosed()) {
                 Socket socket = serverSocket.accept();
                 DataInputStream inp = new DataInputStream(socket.getInputStream());
                 DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-                System.out.println("New client connected!");
+                eventsReciever.log("Новый клиент подключился");
 
                 User user = null;
                 try {
@@ -112,6 +113,7 @@ public class ChatServer {
     public void subscribe(String login, Socket socket) throws IOException {
             clientHandlerMap.put(login, new ClientHandler(login, socket, this));
             sendUserConnectedMessage(login);
+            eventsReciever.log(login + " подписался");
     }
 
     public void unsubscribe(String login) throws IOException {
@@ -123,6 +125,15 @@ public class ChatServer {
         for (ClientHandler clientHandler : clientHandlerMap.values()){
             sendUserConnectedMessage(clientHandler.getLogin());
         }
+        eventsReciever.log("Запрос пользователей");
 
     }
+
+    public void stop() throws IOException {
+        currentSocket.close();
+        System.out.println("Сервер остановлен");
+        eventsReciever.log("Сервер остановлен");
+
+    }
+
 }
